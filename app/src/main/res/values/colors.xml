@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Legacy Colors (mantener compatibilidad) -->
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="primary_color">#1976D2</color>
+    <color name="primary_dark_color">#1565C0</color>
+    <color name="accent_color">#FFC107</color>
+    <color name="background_color">#F5F5F5</color>
+    <color name="background_color2">#28CE3F</color>
+    <color name="text_color">#212121</color>
+    <color name="text_secondary_color">#757575</color>
+    <color name="background_color_gb">#003662</color>
+    <color name="background_color_btn">#1A4C84</color>
+    <color name="temp_calor">#DB8709</color>
+    <color name="moon">#6D6D6D</color>
+    <color name="cloud">#FBFBFB</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimaryDark">#2196F3</color>
+
+    <!-- Formosa Government Blue Theme -->
+    <!-- Primary Blues (Government) -->
+    <color name="formosa_blue_primary">#003662</color>
+    <color name="formosa_blue_light">#1A4C84</color>
+    <color name="formosa_blue_dark">#002447</color>
+    <color name="formosa_blue_accent">#2E5BBA</color>
+    
+    <!-- Background Gradients -->
+    <color name="bg_gradient_start">#003662</color>
+    <color name="bg_gradient_middle">#1A4C84</color>
+    <color name="bg_gradient_end">#2E5BBA</color>
+    
+    <!-- High Contrast Cards -->
+    <color name="card_solid_white">#FFFFFF</color>
+    <color name="card_subtle_white">#F8F9FA</color>
+    <color name="card_shadow_strong">#40000000</color>
+    
+    <!-- Text Colors (High Contrast) -->
+    <color name="text_primary_dark">#1A202C</color>
+    <color name="text_secondary_gray">#4A5568</color>
+    <color name="text_white_primary">#FFFFFF</color>
+    <color name="text_blue_accent">#2E5BBA</color>
+    
+    <!-- Weather Status Colors -->
+    <color name="sunny_yellow">#F6D55C</color>
+    <color name="cloudy_gray">#718096</color>
+    <color name="rainy_blue">#4299E1</color>
+    <color name="wind_teal">#38B2AC</color>
+    
+    <!-- Accessibility Colors -->
+    <color name="success_green">#38A169</color>
+    <color name="warning_orange">#DD6B20</color>
+    <color name="error_red">#E53E3E</color>
+    <color name="info_blue">#3182CE</color>
+    
+    <!-- Legacy Glass Effects (for compatibility) -->
+    <color name="glass_white">#80FFFFFF</color>
+    <color name="glass_white_strong">#99FFFFFF</color>
+    <color name="glass_overlay">#40FFFFFF</color>
+    
+    <!-- Legacy Card Colors -->
+    <color name="card_shadow">#20000000</color>
+    <color name="card_background_modern">#FEFEFE</color>
+    
+    <!-- Legacy Weather Background -->
+    <color name="sunny_start">#F6D55C</color>
+    <color name="sunny_end">#FED201</color>
+    <color name="cloudy_start">#718096</color>
+    <color name="cloudy_end">#4A5568</color>
+    
+    <!-- Additional Legacy Colors -->
+    <color name="text_on_primary">#FFFFFF</color>
+    <color name="info">#3182CE</color>
+    <color name="warning">#DD6B20</color>
+    <color name="text_primary_modern">#1A202C</color>
+    
+    <!-- Chart Colors (FieldClimate Style) -->
+    <color name="chart_background">#FFFFFF</color>
+    <color name="chart_text_color">#424242</color>
+    <color name="chart_grid_color">#E0E0E0</color>
+    <color name="chart_axis_color">#9E9E9E</color>
+    <color name="chart_zero_line_color">#757575</color>
+    <color name="chart_no_data_color">#9E9E9E</color>
+    
+</resources>

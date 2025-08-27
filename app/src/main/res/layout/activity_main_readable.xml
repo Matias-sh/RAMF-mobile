@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Contenido principal con gradiente de Formosa -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mainContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_formosa_gradient">
+
+        <!-- SwipeRefreshLayout -->
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swiperefresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="16dp"
+                    android:paddingTop="48dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="16dp">
+
+                    <!-- Header con botón menú y selector de estación -->
+                    <LinearLayout
+                        android:id="@+id/headerLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="24dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <!-- Botón de menú moderno -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/menuButton"
+                            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            android:padding="0dp"
+                            app:cornerRadius="12dp"
+                            app:icon="@android:drawable/ic_menu_sort_by_size"
+                            app:iconTint="@color/text_white_primary"
+                            app:iconGravity="textStart"
+                            app:iconPadding="0dp"
+                            android:backgroundTint="@color/formosa_blue_accent" />
+
+                        <!-- Selector de estación mejorado -->
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/stationSpinnerLayout"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="12dp"
+                            android:hint="Estación Meteorológica"
+                            app:boxBackgroundColor="@color/card_solid_white"
+                            app:boxStrokeColor="@color/formosa_blue_accent"
+                            app:boxStrokeWidth="2dp"
+                            app:hintTextColor="@color/text_secondary_gray"
+                            app:endIconTint="@color/formosa_blue_accent"
+                            app:boxCornerRadiusTopStart="12dp"
+                            app:boxCornerRadiusTopEnd="12dp"
+                            app:boxCornerRadiusBottomStart="12dp"
+                            app:boxCornerRadiusBottomEnd="12dp">
+
+                            <AutoCompleteTextView
+                                android:id="@+id/stationSpinner"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="none"
+                                android:text="Estación Actual"
+                                android:textColor="@color/text_primary_dark"
+                                android:textAppearance="@style/TextAppearance.Weather.Subtitle.Dark"
+                                android:padding="16dp" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+
+                    <!-- Tarjeta principal del clima - ALTA LEGIBILIDAD -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/mainWeatherCard"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        style="@style/Widget.App.CardView.Main"
+                        android:background="@drawable/card_main_weather"
+                        app:layout_constraintTop_toBottomOf="@id/headerLayout"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="24dp"
+                            android:gravity="center"
+                            android:background="@drawable/card_main_weather">
+
+                            <!-- Icono del clima MAS GRANDE -->
+                            <ImageView
+                                android:id="@+id/weatherIcon"
+                                android:layout_width="100dp"
+                                android:layout_height="100dp"
+                                android:layout_marginBottom="16dp"
+                                android:src="@drawable/ic_weather_sun_cloud"
+                                app:tint="@color/sunny_yellow" />
+
+                            <!-- Temperatura principal MAS LEGIBLE -->
+                            <TextView
+                                android:id="@+id/tempTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="12dp"
+                                android:text="22.64°C"
+                                android:textAppearance="@style/TextAppearance.Weather.Display"
+                                android:textColor="@color/formosa_blue_primary"
+                                android:textSize="52sp"
+                                android:textStyle="bold" />
+
+                            <!-- Temperaturas min/max MEJOR CONTRASTE -->
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center"
+                                android:layout_marginBottom="16dp"
+                                android:background="@color/card_subtle_white"
+                                android:paddingHorizontal="20dp"
+                                android:paddingVertical="12dp"
+                                android:elevation="2dp">
+
+                                <TextView
+                                    android:id="@+id/tempMinTextView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="20dp"
+                                    android:text="Min: 15.31°"
+                                    android:textAppearance="@style/TextAppearance.Weather.Subtitle.Dark"
+                                    android:textColor="@color/info_blue"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    android:drawableStart="@android:drawable/arrow_down_float"
+                                    android:drawableTint="@color/info_blue"
+                                    android:drawablePadding="8dp" />
+
+                                <View
+                                    android:layout_width="2dp"
+                                    android:layout_height="24dp"
+                                    android:background="@color/text_secondary_gray"
+                                    android:layout_marginEnd="20dp" />
+
+                                <TextView
+                                    android:id="@+id/tempMaxTextView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Max: 22.7°"
+                                    android:textAppearance="@style/TextAppearance.Weather.Subtitle.Dark"
+                                    android:textColor="@color/warning_orange"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    android:drawableStart="@android:drawable/arrow_up_float"
+                                    android:drawableTint="@color/warning_orange"
+                                    android:drawablePadding="8dp" />
+
+                            </LinearLayout>
+
+                            <!-- Última comunicación MEJOR LEGIBILIDAD -->
+                            <TextView
+                                android:id="@+id/lastComTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Actualizado: 2025-04-23 11:00:59"
+                                android:textAppearance="@style/TextAppearance.Weather.Caption.Dark"
+                                android:textColor="@color/text_secondary_gray"
+                                android:textSize="13sp"
+                                android:drawableStart="@android:drawable/ic_menu_recent_history"
+                                android:drawableTint="@color/text_secondary_gray"
+                                android:drawablePadding="6dp"
+                                android:gravity="center" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- TabLayout rediseñado ALTA LEGIBILIDAD -->
+                    <com.google.android.material.tabs.TabLayout
+                        android:id="@+id/tabLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@color/card_solid_white"
+                        android:elevation="4dp"
+                        app:tabIndicatorColor="@color/formosa_blue_primary"
+                        app:tabIndicatorHeight="4dp"
+                        app:tabSelectedTextColor="@color/formosa_blue_primary"
+                        app:tabTextColor="@color/text_secondary_gray"
+                        app:tabMode="fixed"
+                        app:tabGravity="fill"
+                        app:tabRippleColor="@color/formosa_blue_light"
+                        app:tabTextAppearance="@style/TextAppearance.Weather.Title.Dark"
+                        app:layout_constraintTop_toBottomOf="@id/mainWeatherCard"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <!-- ViewPager2 -->
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/viewPager"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        app:layout_constraintTop_toBottomOf="@id/tabLayout"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.core.widget.NestedScrollView>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Menú lateral -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/card_solid_white"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/nav_menu"
+        app:itemTextColor="@color/text_primary_dark"
+        app:itemIconTint="@color/formosa_blue_primary" />
+
+</androidx.drawerlayout.widget.DrawerLayout>

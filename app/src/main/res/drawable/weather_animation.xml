@@ -1,0 +1,7 @@
+<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="100" cy="100" r="50" fill="skyblue" />
+    <line x1="50" y1="100" x2="150" y2="100" stroke="white" stroke-width="5">
+        <animate attributeName="x1" values="50;150;50" dur="2s" repeatCount="indefinite" />
+        <animate attributeName="x2" values="150;50;150" dur="2s" repeatCount="indefinite" />
+    </line>
+</svg>

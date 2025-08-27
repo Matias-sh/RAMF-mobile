@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Fondo base con gradiente para día parcialmente nublado -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#90CAF9"
+                android:centerColor="#42A5F5"
+                android:endColor="#1E88E5"
+                android:angle="90"/>
+        </shape>
+    </item>
+
+    <!-- Efecto de brillo solar suavizado -->
+    <item android:right="-120dp" android:top="-120dp">
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="250dp"
+                android:startColor="#40FFEB3B"
+                android:endColor="#00FFEB3B" />
+            <size android:width="300dp" android:height="300dp" />
+        </shape>
+    </item>
+
+    <!-- Efecto de nubes dispersas -->
+    <item android:top="100dp" android:right="20dp">
+        <shape android:shape="oval">
+            <solid android:color="#30FFFFFF" />
+            <size android:width="120dp" android:height="60dp" />
+        </shape>
+    </item>
+
+    <item android:top="150dp" android:left="40dp">
+        <shape android:shape="oval">
+            <solid android:color="#25FFFFFF" />
+            <size android:width="180dp" android:height="90dp" />
+        </shape>
+    </item>
+</layer-list>

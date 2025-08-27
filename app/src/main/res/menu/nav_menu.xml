@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_home"
+        android:title="Inicio" />
+    <item
+        android:id="@+id/nav_charts"
+        android:icon="@drawable/ic_chart"
+        android:title="Gráficos" />
+    <item
+        android:id="@+id/nav_soil_moisture"
+        android:icon="@drawable/ic_soil"
+        android:title="Humedad del Suelo" />
+    <item
+        android:id="@+id/nav_map_view"
+        android:icon="@drawable/ic_map"
+        android:title="Mapa" />
+    <item
+        android:id="@+id/nav_station_overview"
+        android:icon="@drawable/ic_station"
+        android:title="Vista de Estaciones" />
+    <item
+        android:id="@+id/nav_device_management"
+        android:icon="@drawable/ic_device"
+        android:title="Gestión de Dispositivos" />
+    <item
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/ic_default_profile"
+        android:title="Perfil de Usuario" />
+    <item
+        android:id="@+id/nav_settings"
+        android:icon="@drawable/ic_settings"
+        android:title="Configuración" />
+    <item
+        android:id="@+id/nav_logout"
+        android:icon="@drawable/ic_logout"
+        android:title="Cerrar sesión" />
+</menu>

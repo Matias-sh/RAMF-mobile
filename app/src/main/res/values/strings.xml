@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Redes Agrometeorológicas Formosa</string>
+    <string name="title_app">Redes Agrometeorológicas</string>
+    <string name="sub_title_app">Formosa</string>
+    <string name="google_maps_api_key">AIzaSyBTC17-39zuMCoUcY_kq9VyTP8HEEZFWkw</string>
+</resources>

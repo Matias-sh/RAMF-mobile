@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Fondo base con gradiente para día soleado -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#64B5F6"
+                android:centerColor="#2196F3"
+                android:endColor="#1976D2"
+                android:angle="90"/>
+        </shape>
+    </item>
+
+    <!-- Efecto de brillo solar en la esquina superior derecha -->
+    <item android:right="-150dp" android:top="-150dp">
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="300dp"
+                android:startColor="#80FFEB3B"
+                android:endColor="#00FFEB3B" />
+            <size android:width="400dp" android:height="400dp" />
+        </shape>
+    </item>
+
+    <!-- Elementos decorativos sutiles -->
+    <item android:bottom="20dp" android:gravity="bottom|center_horizontal">
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#15FFFFFF"
+                android:endColor="#00FFFFFF"
+                android:angle="90"/>
+            <size android:height="100dp" />
+        </shape>
+    </item>
+</layer-list>

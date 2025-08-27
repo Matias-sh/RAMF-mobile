@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "Bash(powershell:*)",
+      "Bash(for:*)",
+      "Bash(do echo \"Processing: $file\")",
+      "Bash(grep:*)",
+      "Bash(done)",
+      "Bash(move:*)",
+      "Bash(gradlew.bat build:*)",
+      "Bash(.gradlew.bat build)",
+      "Bash(./gradlew:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
