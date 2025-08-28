@@ -21,6 +21,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "RAFapp"
 include(":app")
  

@@ -81,21 +81,27 @@ class SingleChartFragment : Fragment() {
             // Configuración optimizada para pantalla completa
             description = Description().apply { text = "" }
             
-            // Eje X (tiempo) con mejor formato
+            // Eje X (tiempo) con mejor formato replicando la web
             xAxis.apply {
                 position = XAxis.XAxisPosition.BOTTOM
                 textColor = ContextCompat.getColor(requireContext(), R.color.chart_text_color)
-                textSize = 12f
+                textSize = 11f
                 setDrawGridLines(true)
                 gridColor = ContextCompat.getColor(requireContext(), R.color.chart_grid_color)
-                gridLineWidth = 1f
+                gridLineWidth = 0.8f
                 setDrawAxisLine(true)
                 axisLineColor = ContextCompat.getColor(requireContext(), R.color.chart_axis_color)
                 axisLineWidth = 1.5f
+                // Configuración inicial - se actualizará dinámicamente en updateChart
                 valueFormatter = ChartUtils.createTimeFormatter()
-                labelCount = 8
+                labelCount = 6
                 isGranularityEnabled = true
-                // La granularidad se actualizará dinámicamente en updateChart
+                granularity = 600000f // 10 min por defecto (como en la web)
+                // Mejorar espaciado para evitar solapamiento
+                labelRotationAngle = 0f
+                setAvoidFirstLastClipping(true)
+                spaceMin = 0.1f
+                spaceMax = 0.1f
             }
             
             // Eje Y con configuración específica por parámetro
@@ -173,21 +179,33 @@ class SingleChartFragment : Fragment() {
         val entries = mapDataToEntries(data, parameter)
         
         if (entries.isNotEmpty()) {
-            // Calcular rango de tiempo para ajustar granularidad
+            // Calcular rango de tiempo real de los datos recibidos
             val timeRange = if (entries.size > 1) {
                 (entries.last().x - entries.first().x).toLong()
             } else {
                 3600000L // 1 hora por defecto
             }
             
-            // Actualizar granularidad del eje X
-            binding.lineChart.xAxis.granularity = ChartUtils.calculateOptimalGranularity(timeRange)
+            // Configurar eje X ANTES de mostrar datos (replicando comportamiento de la web)
+            binding.lineChart.xAxis.apply {
+                // Aplicar granularidad y formato dinámicos como en la web
+                granularity = ChartUtils.calculateOptimalGranularity(timeRange)
+                valueFormatter = ChartUtils.createDynamicTimeFormatter(timeRange)
+                labelCount = ChartUtils.calculateOptimalLabelCount(timeRange)
+                
+                // Asegurar que las etiquetas no se solapen
+                setLabelCount(labelCount, false)
+                setAvoidFirstLastClipping(true)
+                
+                // Log para debugging - verificar configuración del eje X
+                android.util.Log.d("SingleChartFragment", "Configurando eje X - Rango: ${timeRange}ms, Granularidad: ${granularity}ms, LabelCount: $labelCount")
+            }
             
             val dataSet = ChartUtils.createLineDataSet(entries, parameter, false)
             val lineData = LineData(dataSet)
             
             binding.lineChart.data = lineData
-            binding.lineChart.animateXY(1000, 800, Easing.EaseInOutQuart, Easing.EaseInOutQuart)
+            binding.lineChart.animateXY(800, 600, Easing.EaseInOutCubic, Easing.EaseInOutCubic)
             binding.lineChart.invalidate()
             
             // Actualizar estadísticas
@@ -208,8 +226,6 @@ class SingleChartFragment : Fragment() {
         val max = values.maxOrNull() ?: 0f
         val avg = values.average().toFloat()
         val current = values.lastOrNull() ?: 0f
-        
-        val unit = ChartUtils.getParameterUnit(parameter)
         
         binding.apply {
             currentValue.text = ChartUtils.formatParameterValue(current, parameter)

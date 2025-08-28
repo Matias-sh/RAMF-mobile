@@ -8,6 +8,9 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import android.view.LayoutInflater
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -286,8 +289,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                     .title(station.name ?: "Estación ${station.id}")
                     .snippet(getMarkerSnippet(station.id))
                 
-                // Personalizar el ícono según el parámetro seleccionado
-                setMarkerIcon(markerOptions, station.id)
+                // Usar marcador personalizado con valor visible (como FieldClimate)
+                setCustomMarkerIcon(markerOptions, station.id)
                 
                 val marker = mMap.addMarker(markerOptions)
                 marker?.let {
@@ -320,6 +323,59 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         return "Cargando datos..."
     }
     
+    private fun setCustomMarkerIcon(markerOptions: MarkerOptions, stationId: String) {
+        val widgetData = stationWidgetData[stationId]
+        if (widgetData != null) {
+            // Obtener solo el valor según el parámetro seleccionado (como FieldClimate)
+            val value = when (selectedParameter) {
+                "temperatura" -> String.format("%.1f", widgetData.temperature)
+                "humedad" -> String.format("%.1f", widgetData.relativeHumidity)
+                "viento" -> String.format("%.1f", widgetData.windSpeed)
+                "precipitacion" -> String.format("%.1f", widgetData.rainLastHour)
+                "radiacion" -> widgetData.solarRadiation.toString()
+                "presion" -> String.format("%.0f", widgetData.airPressure)
+                "punto_rocio" -> String.format("%.1f", widgetData.dewPoint)
+                else -> "--"
+            }
+            
+            // Crear marcador personalizado con solo el valor visible
+            val customIcon = createCustomMarker(value)
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(customIcon))
+        } else {
+            // Marcador por defecto mientras carga
+            val customIcon = createCustomMarker("--")
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(customIcon))
+        }
+    }
+    
+    private fun createCustomMarker(value: String): Bitmap {
+        // Inflar el layout personalizado
+        val inflater = LayoutInflater.from(this)
+        val markerView = inflater.inflate(R.layout.custom_marker_layout, null)
+        
+        // Establecer solo el valor
+        val valueText = markerView.findViewById<TextView>(R.id.markerValueText)
+        valueText.text = value
+        
+        // Medir y hacer layout
+        markerView.measure(
+            android.view.View.MeasureSpec.makeMeasureSpec(0, android.view.View.MeasureSpec.UNSPECIFIED),
+            android.view.View.MeasureSpec.makeMeasureSpec(0, android.view.View.MeasureSpec.UNSPECIFIED)
+        )
+        markerView.layout(0, 0, markerView.measuredWidth, markerView.measuredHeight)
+        
+        // Convertir a bitmap
+        val bitmap = Bitmap.createBitmap(
+            markerView.measuredWidth, 
+            markerView.measuredHeight, 
+            Bitmap.Config.ARGB_8888
+        )
+        val canvas = Canvas(bitmap)
+        markerView.draw(canvas)
+        
+        return bitmap
+    }
+
     private fun setMarkerIcon(markerOptions: MarkerOptions, stationId: String) {
         val widgetData = stationWidgetData[stationId]
         if (widgetData != null) {
@@ -419,7 +475,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                 .title(title)
                 .snippet(getMarkerSnippet(stationId))
             
-            setMarkerIcon(markerOptions, stationId)
+            setCustomMarkerIcon(markerOptions, stationId)
             
             val newMarker = mMap.addMarker(markerOptions)
             newMarker?.let {
@@ -443,39 +499,13 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     }
     
     private fun showStationInfo(marker: Marker) {
+        // Solo mostrar el nombre de la estación en una etiqueta simple
         val stationName = marker.title ?: "Estación Desconocida"
-        val stationData = marker.snippet ?: "Sin datos"
         
-        // Encontrar información adicional de la estación
-        val station = weatherStations.find { stationMarkers[it.id]?.position == marker.position }
-        val additionalInfo = if (station != null) {
-            val widgetData = stationWidgetData[station.id]
-            if (widgetData != null) {
-                try {
-                    "\n\nDatos completos:\n" +
-                    "🌡️ Temperatura: ${String.format("%.1f", widgetData.temperature)}°C\n" +
-                    "💧 Humedad: ${String.format("%.1f", widgetData.relativeHumidity)}%\n" +
-                    "🌪️ Viento: ${String.format("%.1f", widgetData.windSpeed)} m/s\n" +
-                    "🌧️ Precipitación: ${String.format("%.1f", widgetData.rainLastHour)} mm\n" +
-                    "☀️ Radiación solar: ${widgetData.solarRadiation} W/m²\n" +
-                    "🎯 Presión: ${String.format("%.1f", widgetData.airPressure)} hPa\n" +
-                    "💨 Punto rocío: ${String.format("%.1f", widgetData.dewPoint)}°C"
-                } catch (e: Exception) {
-                    Log.e(TAG, "Error formateando datos: ${e.message}")
-                    "\n\nError mostrando datos completos"
-                }
-            } else {
-                "\n\nCargando datos..."
-            }
-        } else ""
-        
-        // Mostrar dialog con más información
-        androidx.appcompat.app.AlertDialog.Builder(this)
-            .setTitle(stationName)
-            .setMessage("$stationData$additionalInfo")
-            .setPositiveButton("Cerrar") { dialog, _ -> dialog.dismiss() }
-            .show()
+        // Mostrar toast simple con el nombre de la estación
+        Toast.makeText(this, stationName, Toast.LENGTH_SHORT).show()
     }
+    
     
     private fun checkLocationPermission(): Boolean {
         return ContextCompat.checkSelfPermission(

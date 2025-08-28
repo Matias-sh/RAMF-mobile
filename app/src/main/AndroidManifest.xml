@@ -22,6 +22,8 @@
         android:roundIcon="@drawable/ic_logoraf"
         android:supportsRtl="true"
         android:theme="@style/Theme.RAFapp"
+        android:hardwareAccelerated="true"
+        android:largeHeap="false"
         tools:targetApi="31">
         
         <!-- Google Maps API Key -->

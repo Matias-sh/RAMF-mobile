@@ -10,7 +10,12 @@
       "Bash(move:*)",
       "Bash(gradlew.bat build:*)",
       "Bash(.gradlew.bat build)",
-      "Bash(./gradlew:*)"
+      "Bash(./gradlew:*)",
+      "Bash(keytool:*)",
+      "Read(C:\\Users\\Matias\\Downloads/**)",
+      "Read(C:\\Users\\Matias\\Downloads/**)",
+      "Read(C:\\Users\\Matias\\Downloads/**)",
+      "Read(C:\\Users\\Matias\\Downloads/**)"
     ],
     "deny": [],
     "ask": []

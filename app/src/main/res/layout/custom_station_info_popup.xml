@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="320dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@drawable/popup_background"
+    android:elevation="8dp">
+
+    <!-- Station Name -->
+    <TextView
+        android:id="@+id/stationNameText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Estación Meteorológica"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_primary_dark"
+        android:layout_marginBottom="8dp"
+        android:gravity="start" />
+
+    <!-- Current Temperature (Large display) -->
+    <TextView
+        android:id="@+id/currentTemperatureText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="22.0°C"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/formosa_blue_primary"
+        android:layout_marginBottom="12dp"
+        android:gravity="start" />
+
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider_gray"
+        android:layout_marginBottom="12dp" />
+
+    <!-- Complete Data Label -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Datos completos:"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_secondary_gray"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Weather Parameters with Icons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="4dp">
+
+        <!-- Temperature -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="28dp"
+                android:layout_height="wrap_content"
+                android:text="🌡️"
+                android:textSize="16sp"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/temperatureData"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Temperatura: 22.0°C"
+                android:textSize="14sp"
+                android:textColor="@color/text_primary_dark"
+                android:paddingStart="8dp"
+                android:paddingEnd="0dp" />
+
+        </LinearLayout>
+
+        <!-- Humidity -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="28dp"
+                android:layout_height="wrap_content"
+                android:text="💧"
+                android:textSize="16sp"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/humidityData"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Humedad: 48.3%"
+                android:textSize="14sp"
+                android:textColor="@color/text_primary_dark"
+                android:paddingStart="8dp"
+                android:paddingEnd="0dp" />
+
+        </LinearLayout>
+
+        <!-- Wind -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="28dp"
+                android:layout_height="wrap_content"
+                android:text="🌬️"
+                android:textSize="16sp"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/windData"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Viento: 6.1 m/s"
+                android:textSize="14sp"
+                android:textColor="@color/text_primary_dark"
+                android:paddingStart="8dp"
+                android:paddingEnd="0dp" />
+
+        </LinearLayout>
+
+        <!-- Precipitation -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="28dp"
+                android:layout_height="wrap_content"
+                android:text="🌧️"
+                android:textSize="16sp"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/precipitationData"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Precipitación: 0.0 mm"
+                android:textSize="14sp"
+                android:textColor="@color/text_primary_dark"
+                android:paddingStart="8dp"
+                android:paddingEnd="0dp" />
+
+        </LinearLayout>
+
+        <!-- Solar Radiation -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="28dp"
+                android:layout_height="wrap_content"
+                android:text="☀️"
+                android:textSize="16sp"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/solarRadiationData"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Radiación solar: 832 W/m²"
+                android:textSize="14sp"
+                android:textColor="@color/text_primary_dark"
+                android:paddingStart="8dp"
+                android:paddingEnd="0dp" />
+
+        </LinearLayout>
+
+        <!-- Pressure -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="28dp"
+                android:layout_height="wrap_content"
+                android:text="🎯"
+                android:textSize="16sp"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/pressureData"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Presión: 1011 hPa"
+                android:textSize="14sp"
+                android:textColor="@color/text_primary_dark"
+                android:paddingStart="8dp"
+                android:paddingEnd="0dp" />
+
+        </LinearLayout>
+
+        <!-- Dew Point -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="4dp">
+
+            <TextView
+                android:layout_width="28dp"
+                android:layout_height="wrap_content"
+                android:text="❄️"
+                android:textSize="16sp"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/dewPointData"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Punto rocío: 10.5°C"
+                android:textSize="14sp"
+                android:textColor="@color/text_primary_dark"
+                android:paddingStart="8dp"
+                android:paddingEnd="0dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Close Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/closeButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="CERRAR"
+        android:textColor="@android:color/white"
+        app:backgroundTint="@color/formosa_blue_primary"
+        app:cornerRadius="8dp"
+        android:textStyle="bold" />
+
+</LinearLayout>

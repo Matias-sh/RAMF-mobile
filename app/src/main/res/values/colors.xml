@@ -87,4 +87,9 @@
     <color name="chart_zero_line_color">#757575</color>
     <color name="chart_no_data_color">#9E9E9E</color>
     
+    <!-- Map Colors -->
+    <color name="divider_gray">#E0E0E0</color>
+    <color name="marker_text_white">#FFFFFF</color>
+    <color name="marker_text_dark">#333333</color>
+    
 </resources>

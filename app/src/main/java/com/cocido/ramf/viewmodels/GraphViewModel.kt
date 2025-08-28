@@ -19,7 +19,7 @@ data class GraphUiState(
     val currentStationId: String = "00210E7D",
     val selectedParameters: Set<String> = setOf("temperatura"),
     val errorMessage: String? = null,
-    val dateRangeLabel: String = "24h"
+    val dateRangeLabel: String = "1h"
 )
 
 class GraphViewModel(private val repository: WeatherRepository) : ViewModel() {
@@ -126,8 +126,7 @@ class GraphViewModel(private val repository: WeatherRepository) : ViewModel() {
     }
     
     private fun generateDateRange(): Pair<String, String> {
-        // Por simplicidad, usar las últimas 24 horas
-        // En una implementación completa, esto vendría del estado
+        // Generar rango basado en la etiqueta actual del estado
         val calendar = java.util.Calendar.getInstance()
         val isoFormatter = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", java.util.Locale.US).apply {
             timeZone = java.util.TimeZone.getTimeZone("UTC")
@@ -136,7 +135,16 @@ class GraphViewModel(private val repository: WeatherRepository) : ViewModel() {
         val endDate = calendar.time
         val to = isoFormatter.format(endDate)
         
-        calendar.add(java.util.Calendar.DAY_OF_YEAR, -1)
+        // Determinar el rango según la etiqueta actual
+        when (_uiState.value.dateRangeLabel) {
+            "1h" -> calendar.add(java.util.Calendar.HOUR_OF_DAY, -1)
+            "6h" -> calendar.add(java.util.Calendar.HOUR_OF_DAY, -6)
+            "1d" -> calendar.add(java.util.Calendar.DAY_OF_YEAR, -1)
+            "1w" -> calendar.add(java.util.Calendar.DAY_OF_YEAR, -7)
+            "1m" -> calendar.add(java.util.Calendar.DAY_OF_YEAR, -30)
+            else -> calendar.add(java.util.Calendar.HOUR_OF_DAY, -1) // Por defecto 1 hora
+        }
+        
         val startDate = calendar.time
         val from = isoFormatter.format(startDate)
         

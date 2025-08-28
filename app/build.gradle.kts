@@ -8,12 +8,22 @@ android {
     namespace = "com.cocido.ramf"
     compileSdk = 34
 
+    signingConfigs {
+        create("release") {
+            // Estos valores deben configurarse en gradle.properties o usar variables de entorno
+            storeFile = file("../ramf-release-key.keystore")
+            storePassword = System.getenv("KEYSTORE_PASSWORD") ?: "changeme"
+            keyAlias = "ramf"
+            keyPassword = System.getenv("KEY_PASSWORD") ?: "changeme"
+        }
+    }
+
     defaultConfig {
         applicationId = "com.cocido.ramf"
         minSdk = 27
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0-beta"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         
@@ -45,7 +55,7 @@ android {
                 "proguard-rules.pro"
             )
             
-            signingConfig = signingConfigs.getByName("debug") // Cambiar en producción
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {

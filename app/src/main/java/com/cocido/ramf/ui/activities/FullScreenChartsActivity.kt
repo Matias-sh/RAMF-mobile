@@ -110,7 +110,6 @@ class FullScreenChartsActivity : AppCompatActivity() {
     
     private fun setupFilters() {
         // Variables para fechas
-        val calendar = Calendar.getInstance()
         val dateFormatter = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
         
         // Configurar header expandible
@@ -133,14 +132,19 @@ class FullScreenChartsActivity : AppCompatActivity() {
         binding.chipGroupTimeRange.setOnCheckedStateChangeListener { _, checkedIds ->
             if (checkedIds.isNotEmpty()) {
                 val selectedChipId = checkedIds[0]
-                val (from, to) = when (selectedChipId) {
-                    R.id.chip1Hour -> generateTimeRange(1, Calendar.HOUR_OF_DAY)
-                    R.id.chip6Hours -> generateTimeRange(6, Calendar.HOUR_OF_DAY)
-                    R.id.chip1Day -> generateTimeRange(1, Calendar.DAY_OF_YEAR)
-                    R.id.chip1Week -> generateTimeRange(7, Calendar.DAY_OF_YEAR)
-                    R.id.chip1Month -> generateTimeRange(30, Calendar.DAY_OF_YEAR)
-                    else -> generateTimeRange(1, Calendar.HOUR_OF_DAY)
+                val (timeRange, label) = when (selectedChipId) {
+                    R.id.chip1Hour -> Pair(generateTimeRange(1, Calendar.HOUR_OF_DAY), "1h")
+                    R.id.chip6Hours -> Pair(generateTimeRange(6, Calendar.HOUR_OF_DAY), "6h")
+                    R.id.chip1Day -> Pair(generateTimeRange(1, Calendar.DAY_OF_YEAR), "1d")
+                    R.id.chip1Week -> Pair(generateTimeRange(7, Calendar.DAY_OF_YEAR), "1w")
+                    R.id.chip1Month -> Pair(generateTimeRange(30, Calendar.DAY_OF_YEAR), "1m")
+                    else -> Pair(generateTimeRange(1, Calendar.HOUR_OF_DAY), "1h")
                 }
+                
+                val (from, to) = timeRange
+                
+                // Actualizar la etiqueta en el ViewModel
+                viewModel.updateDateRangeLabel(label)
                 
                 // Actualizar campos de fecha
                 binding.fromDateEditText.setText(dateFormatter.format(Date(from)))
@@ -156,10 +160,13 @@ class FullScreenChartsActivity : AppCompatActivity() {
             applyCustomDateFilter()
         }
         
-        // Establecer filtro inicial de 1 hora
+        // Establecer filtro inicial de 1 hora y seleccionar chip correspondiente
         val (from, to) = generateTimeRange(1, Calendar.HOUR_OF_DAY)
         binding.fromDateEditText.setText(dateFormatter.format(Date(from)))
         binding.toDateEditText.setText(dateFormatter.format(Date(to)))
+        
+        // Seleccionar chip de 1 hora por defecto para coherencia
+        binding.chip1Hour.isChecked = true
     }
     
     private fun showDateTimePicker(onDateSelected: (Date) -> Unit) {
@@ -205,7 +212,12 @@ class FullScreenChartsActivity : AppCompatActivity() {
         val fromIso = isoFormatter.format(Date(fromMillis))
         val toIso = isoFormatter.format(Date(toMillis))
         
+        // Log para debugging - verificar rangos exactos
+        val rangeDurationMs = toMillis - fromMillis
+        val rangeDurationHours = rangeDurationMs / 3600000f
         Log.d("FullScreenCharts", "Aplicando filtro: $fromIso - $toIso")
+        Log.d("FullScreenCharts", "Duración exacta del rango: ${rangeDurationHours}h (${rangeDurationMs}ms)")
+        
         viewModel.loadWeatherData(fromIso, toIso)
     }
     
@@ -220,6 +232,8 @@ class FullScreenChartsActivity : AppCompatActivity() {
                 val toDate = dateFormatter.parse(toText)
                 
                 if (fromDate != null && toDate != null) {
+                    // Actualizar etiqueta a personalizada para rangos customizados
+                    viewModel.updateDateRangeLabel("custom")
                     applyTimeFilter(fromDate.time, toDate.time)
                 }
             } catch (e: Exception) {
@@ -234,24 +248,14 @@ class FullScreenChartsActivity : AppCompatActivity() {
         val stationId = intent.getStringExtra(EXTRA_STATION_ID)
         if (stationId != null) {
             viewModel.selectStation(stationId)
-            // Cargar datos para las últimas 24 horas por defecto
-            val (from, to) = generateLast24HoursRange()
-            viewModel.loadWeatherData(from, to)
+            // Asegurar que el estado inicial sea "1h"
+            viewModel.updateDateRangeLabel("1h")
+            // Cargar datos para 1 hora por defecto (coincide con chip seleccionado)
+            val (from, to) = generateTimeRange(1, Calendar.HOUR_OF_DAY)
+            applyTimeFilter(from, to)
         }
     }
     
-    private fun generateLast24HoursRange(): Pair<String, String> {
-        val calendar = java.util.Calendar.getInstance()
-        val isoFormatter = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", java.util.Locale.US).apply {
-            timeZone = java.util.TimeZone.getTimeZone("UTC")
-        }
-        
-        val endDate = calendar.time
-        calendar.add(java.util.Calendar.HOUR_OF_DAY, -24)
-        val startDate = calendar.time
-        
-        return Pair(isoFormatter.format(startDate), isoFormatter.format(endDate))
-    }
     
     private fun updateLoadingState(isLoading: Boolean) {
         // Implementar loading state si es necesario

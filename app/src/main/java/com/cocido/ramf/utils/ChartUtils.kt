@@ -164,6 +164,23 @@ object ChartUtils {
         }
     }
     
+    fun createDynamicTimeFormatter(timeRangeMillis: Long): ValueFormatter {
+        return object : ValueFormatter() {
+            private val formatter = when {
+                timeRangeMillis <= 259200000L -> SimpleDateFormat("HH:mm", Locale.getDefault())    // <= 3d: formato HH:mm como en la web
+                else -> SimpleDateFormat("dd/MM", Locale.getDefault())                            // > 3d: formato dd/MM
+            }
+            
+            override fun getFormattedValue(value: Float): String {
+                return try {
+                    formatter.format(Date(value.toLong()))
+                } catch (e: Exception) {
+                    ""
+                }
+            }
+        }
+    }
+    
     fun createDateFormatter(): ValueFormatter {
         return object : ValueFormatter() {
             private val dateFormatter = SimpleDateFormat("dd/MM", Locale.getDefault())
@@ -207,11 +224,21 @@ object ChartUtils {
     
     fun calculateOptimalGranularity(timeRangeMillis: Long): Float {
         return when {
-            timeRangeMillis <= 3600000L -> 300000f      // <= 1h: 5 min
-            timeRangeMillis <= 21600000L -> 1800000f    // <= 6h: 30 min
-            timeRangeMillis <= 86400000L -> 3600000f    // <= 1d: 1h
-            timeRangeMillis <= 604800000L -> 21600000f  // <= 1w: 6h
-            else -> 86400000f                           // > 1w: 1d
+            timeRangeMillis <= 3600000L -> 600000f      // <= 1h: 10 min (como en la web)
+            timeRangeMillis <= 21600000L -> 1800000f    // <= 6h: 30 min (mejor espaciado)
+            timeRangeMillis <= 86400000L -> 7200000f    // <= 1d: 2h (como en la web)
+            timeRangeMillis <= 604800000L -> 43200000f  // <= 1w: 12h
+            else -> 172800000f                          // > 1w: 2d
+        }
+    }
+    
+    fun calculateOptimalLabelCount(timeRangeMillis: Long): Int {
+        return when {
+            timeRangeMillis <= 3600000L -> 6           // <= 1h: 6 etiquetas (cada 10min, como en la web)
+            timeRangeMillis <= 21600000L -> 12         // <= 6h: 12 etiquetas (cada 30min)
+            timeRangeMillis <= 86400000L -> 12         // <= 1d: 12 etiquetas (cada 2h, como en la web)
+            timeRangeMillis <= 604800000L -> 14        // <= 1w: 14 etiquetas (cada 12h)
+            else -> 15                                 // > 1w: 15 etiquetas (cada 2d)
         }
     }
 }

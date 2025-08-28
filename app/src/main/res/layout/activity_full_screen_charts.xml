@@ -45,21 +45,21 @@
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!-- Panel de filtros de tiempo -->
+        <!-- Panel de filtros de tiempo compacto -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/filtersCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp"
             app:cardBackgroundColor="@android:color/white">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="8dp">
 
             <!-- Header clickeable para expandir/colapsar -->
             <LinearLayout
@@ -71,7 +71,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:background="?android:attr/selectableItemBackground"
-                android:layout_marginBottom="12dp">
+                android:layout_marginBottom="6dp">
 
                 <!-- Título del panel -->
                 <TextView
@@ -79,7 +79,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Filtros de tiempo"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold"
                     android:textColor="@color/formosa_blue_primary" />
 
@@ -107,9 +107,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Rango rápido:"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:textColor="@color/text_secondary_gray"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginBottom="4dp" />
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chipGroupTimeRange"
@@ -118,7 +118,7 @@
                 app:chipSpacingHorizontal="8dp"
                 app:chipSpacingVertical="4dp"
                 app:singleSelection="true"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="8dp">
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip1Hour"
@@ -163,9 +163,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Rango personalizado:"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:textColor="@color/text_secondary_gray"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginBottom="4dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
