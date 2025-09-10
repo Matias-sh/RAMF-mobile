@@ -113,50 +113,61 @@ class MainActivity : AppCompatActivity() {
                     drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
+
                 R.id.nav_charts -> {
                     openChartsActivity()
                     drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
+                /*
                 R.id.nav_soil_moisture -> {
                     // TODO: Implementar Soil Moisture
                     Toast.makeText(this, "Soil Moisture - En desarrollo", Toast.LENGTH_SHORT).show()
                     drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
+                 */
                 R.id.nav_map_view -> {
                     openMapActivity()
                     drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
+                /*
                 R.id.nav_station_overview -> {
                     // TODO: Implementar Station Overview
-                    Toast.makeText(this, "Station Overview - En desarrollo", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Station Overview - En desarrollo", Toast.LENGTH_SHORT)
+                        .show()
                     drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
+
                 R.id.nav_device_management -> {
                     // TODO: Implementar Device Management
-                    Toast.makeText(this, "Device Management - En desarrollo", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Device Management - En desarrollo", Toast.LENGTH_SHORT)
+                        .show()
                     drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
+                */
                 R.id.nav_profile -> {
                     val intent = Intent(this, UserProfileActivity::class.java)
                     startActivity(intent)
                     drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
+                /*
                 R.id.nav_settings -> {
                     // TODO: Implementar configuración
                     Toast.makeText(this, "Configuración - En desarrollo", Toast.LENGTH_SHORT).show()
                     drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
+                */
                 R.id.nav_logout -> {
                     logout()
                     true
                 }
+
                 else -> false
             }
         }
@@ -166,7 +177,7 @@ class MainActivity : AppCompatActivity() {
         setupObservers()
         fetchWeatherData()
     }
-    
+
     private fun openChartsActivity() {
         if (weatherStations.isNotEmpty()) {
             val currentStation = weatherStations[selectedStationPosition]
@@ -192,21 +203,24 @@ class MainActivity : AppCompatActivity() {
             if (stations.isNotEmpty()) {
                 weatherStations = stations
                 setupStationSpinner(weatherStations)
-                
+
                 // Buscar Formosa (Polo Científico) como estación por defecto
                 val defaultStation = stations.find { station ->
                     station.name?.contains("Formosa", ignoreCase = true) == true &&
-                    station.name?.contains("Polo", ignoreCase = true) == true
+                            station.name?.contains("Polo", ignoreCase = true) == true
                 } ?: stations.find { station ->
                     station.name?.contains("Formosa", ignoreCase = true) == true
                 } ?: stations[0] // Fallback a la primera estación si no se encuentra Formosa
-                
+
                 val defaultStationIndex = stations.indexOf(defaultStation)
                 selectedStationPosition = defaultStationIndex
                 val stationName = defaultStation.id
-                
-                Log.d("MainActivity", "Loading data for default station: ${defaultStation.name} (${stationName})")
-                
+
+                Log.d(
+                    "MainActivity",
+                    "Loading data for default station: ${defaultStation.name} (${stationName})"
+                )
+
                 // Solo cargar datos si tenemos un ID de estación válido
                 if (stationName.isNotBlank()) {
                     viewModel.fetchStationData(stationName)
@@ -216,7 +230,7 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     Log.e("MainActivity", "Station ID is blank for ${defaultStation.name}")
                 }
-                
+
                 stationSpinner.setText(defaultStation.name ?: "Desconocida", false)
             } else {
                 Log.e("MainActivity", "No weather stations received")
@@ -229,16 +243,19 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewModel.temperatureMaxMin.observe(this) { tempMaxMin ->
-            tempMinTextView.text = "Temp. mínima: ${tempMaxMin.min?.let { String.format("%.2f", it) } ?: "--"} °C"
-            tempMaxTextView.text = "Temp. máxima: ${tempMaxMin.max?.let { String.format("%.2f", it) } ?: "--"} °C"
+            tempMinTextView.text =
+                "Temp. mínima: ${tempMaxMin.min?.let { String.format("%.2f", it) } ?: "--"} °C"
+            tempMaxTextView.text =
+                "Temp. máxima: ${tempMaxMin.max?.let { String.format("%.2f", it) } ?: "--"} °C"
         }
 
         // Observamos los datos del widget para temperatura actual
         viewModel.widgetData.observe(this) { widgetData ->
             widgetData?.let { widget ->
                 // Temperatura actual desde el widget (formato igual a la web: 2 decimales)
-                tempTextView.text = String.format(Locale.getDefault(), "%.2f °C", widget.temperature)
-                
+                tempTextView.text =
+                    String.format(Locale.getDefault(), "%.2f °C", widget.temperature)
+
                 // Determinar condición del cielo con los datos del widget
                 val condition = determineSkyConditionFromWidget(widget, isDaytime = true)
                 updateBackgroundAndIcon(condition, isDaytime = true)
@@ -270,13 +287,16 @@ class MainActivity : AppCompatActivity() {
     private fun fetchWeatherData() {
         Log.d("MainActivity", "fetchWeatherData called")
         swipeRefreshLayout.isRefreshing = true
-        
+
         // Solo actualizar datos de la estación actual, no resetear a la primera
         if (weatherStations.isNotEmpty() && selectedStationPosition >= 0) {
             val currentStation = weatherStations[selectedStationPosition]
             val stationName = currentStation.id
-            Log.d("MainActivity", "Refreshing data for current station: ${currentStation.name} (${stationName})")
-            
+            Log.d(
+                "MainActivity",
+                "Refreshing data for current station: ${currentStation.name} (${stationName})"
+            )
+
             // Actualizar datos de la estación actual
             viewModel.fetchTemperatureMaxMin(stationName)
             viewModel.fetchWeatherDataLastDay(stationName)
@@ -285,7 +305,7 @@ class MainActivity : AppCompatActivity() {
             // Fallback: cargar estaciones solo si no tenemos ninguna
             viewModel.fetchWeatherStations()
         }
-        
+
         swipeRefreshLayout.isRefreshing = false
     }
 
@@ -313,13 +333,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun formatLastCommunication(isoDate: String?): String {
         if (isoDate == null) return "--/--/----"
-        
+
         return try {
             // Parsear fecha ISO: "2025-08-18T11:31:25.000Z"
             val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
             inputFormat.timeZone = TimeZone.getTimeZone("UTC")
             val date = inputFormat.parse(isoDate)
-            
+
             // Formatear para mostrar: "18/08/25 09:31"
             val outputFormat = SimpleDateFormat("dd/MM/yy HH:mm", Locale.getDefault())
             outputFormat.timeZone = TimeZone.getDefault() // Hora local
