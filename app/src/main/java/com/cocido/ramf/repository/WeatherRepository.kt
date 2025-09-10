@@ -82,18 +82,31 @@ class WeatherRepository {
         from: String,
         to: String
     ): Result<WrapperResponse> {
+        // Por ahora usamos el endpoint regular que sí funciona
         return withContext(Dispatchers.IO) {
             try {
-                val response = weatherService.getWeatherDataForCharts(
+                val response = weatherService.getWeatherDataTimeRange(
                     stationName = stationName,
                     from = from,
                     to = to
                 )
                 
                 if (response.isSuccessful && response.body() != null) {
-                    // La API devuelve List<WeatherData> directamente, lo envolvemos en WrapperResponse
-                    val wrappedResponse = WrapperResponse(data = response.body()!!)
-                    Result.Success(wrappedResponse)
+                    val data = response.body()!!
+                    android.util.Log.d("WeatherRepository", "Charts data received - Size: ${data.data.size}")
+                    
+                    // Log estructura de primera entrada para debugging
+                    if (data.data.isNotEmpty()) {
+                        val first = data.data.first()
+                        android.util.Log.d("WeatherRepository", "First entry structure:")
+                        android.util.Log.d("WeatherRepository", "  Date: ${first.date}")
+                        android.util.Log.d("WeatherRepository", "  Sensors object: ${first.sensors}")
+                        android.util.Log.d("WeatherRepository", "  hcAirTemperature: ${first.sensors.hcAirTemperature}")
+                        android.util.Log.d("WeatherRepository", "  hcRelativeHumidity: ${first.sensors.hcRelativeHumidity}")
+                        android.util.Log.d("WeatherRepository", "  airPressure: ${first.sensors.airPressure}")
+                    }
+                    
+                    Result.Success(data)
                 } else {
                     Result.Error(Exception("Error ${response.code()}: ${response.message()}"))
                 }

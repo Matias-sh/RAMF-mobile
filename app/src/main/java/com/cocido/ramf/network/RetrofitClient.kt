@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
-    private val BASE_URL = BuildConfig.API_BASE_URL
+    private val BASE_URL = BuildConfig.BASE_URL_PROD
     private const val TIMEOUT_SECONDS = 30L
     
     private var authToken: String? = null

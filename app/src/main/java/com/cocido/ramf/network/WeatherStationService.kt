@@ -52,7 +52,7 @@ interface WeatherStationService {
         @Query("from") from: String,
         @Query("to") to: String,
         @Query("timeRange") timeRange: String = "custom"
-    ): Response<List<WeatherData>>
+    ): Response<ChartsResponse>
 
     // Datos desde/hasta (alternativo para filtros)
     @GET("stations-measurement/data-from-to/{stationName}")

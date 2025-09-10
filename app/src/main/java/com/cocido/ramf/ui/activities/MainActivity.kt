@@ -193,15 +193,31 @@ class MainActivity : AppCompatActivity() {
                 weatherStations = stations
                 setupStationSpinner(weatherStations)
                 
-                // Cargar datos de la primera estación por defecto
-                val firstStation = stations[0]
-                val stationName = firstStation.id // En la nueva API, id es el stationName
-                Log.d("MainActivity", "Loading data for first station: ${firstStation.name} (${stationName})")
-                // No llamar fetchStationData porque el ViewModel ya lo hace automáticamente
-                viewModel.fetchTemperatureMaxMin(stationName)
-                viewModel.fetchWeatherDataLastDay(stationName)
-                viewModel.fetchWidgetData(stationName)
-                stationSpinner.setText(firstStation.name ?: "Desconocida", false)
+                // Buscar Formosa (Polo Científico) como estación por defecto
+                val defaultStation = stations.find { station ->
+                    station.name?.contains("Formosa", ignoreCase = true) == true &&
+                    station.name?.contains("Polo", ignoreCase = true) == true
+                } ?: stations.find { station ->
+                    station.name?.contains("Formosa", ignoreCase = true) == true
+                } ?: stations[0] // Fallback a la primera estación si no se encuentra Formosa
+                
+                val defaultStationIndex = stations.indexOf(defaultStation)
+                selectedStationPosition = defaultStationIndex
+                val stationName = defaultStation.id
+                
+                Log.d("MainActivity", "Loading data for default station: ${defaultStation.name} (${stationName})")
+                
+                // Solo cargar datos si tenemos un ID de estación válido
+                if (stationName.isNotBlank()) {
+                    viewModel.fetchStationData(stationName)
+                    viewModel.fetchTemperatureMaxMin(stationName)
+                    viewModel.fetchWeatherDataLastDay(stationName)
+                    viewModel.fetchWidgetData(stationName)
+                } else {
+                    Log.e("MainActivity", "Station ID is blank for ${defaultStation.name}")
+                }
+                
+                stationSpinner.setText(defaultStation.name ?: "Desconocida", false)
             } else {
                 Log.e("MainActivity", "No weather stations received")
             }
@@ -213,15 +229,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewModel.temperatureMaxMin.observe(this) { tempMaxMin ->
-            tempMinTextView.text = "Min: ${tempMaxMin.min ?: "--"}°"
-            tempMaxTextView.text = "Max: ${tempMaxMin.max ?: "--"}°"
+            tempMinTextView.text = "Temp. mínima: ${tempMaxMin.min?.let { String.format("%.2f", it) } ?: "--"} °C"
+            tempMaxTextView.text = "Temp. máxima: ${tempMaxMin.max?.let { String.format("%.2f", it) } ?: "--"} °C"
         }
 
         // Observamos los datos del widget para temperatura actual
         viewModel.widgetData.observe(this) { widgetData ->
             widgetData?.let { widget ->
-                // Temperatura actual desde el widget
-                tempTextView.text = String.format(Locale.getDefault(), "%.1f °C", widget.temperature)
+                // Temperatura actual desde el widget (formato igual a la web: 2 decimales)
+                tempTextView.text = String.format(Locale.getDefault(), "%.2f °C", widget.temperature)
                 
                 // Determinar condición del cielo con los datos del widget
                 val condition = determineSkyConditionFromWidget(widget, isDaytime = true)
@@ -236,7 +252,7 @@ class MainActivity : AppCompatActivity() {
                 // Solo usar como fallback si no tenemos datos del widget
                 if (tempTextView.text.isNullOrBlank() || tempTextView.text == "-- °C") {
                     wd.sensors.hcAirTemperature?.avg?.let { t ->
-                        tempTextView.text = String.format(Locale.getDefault(), "%.1f °C", t)
+                        tempTextView.text = String.format(Locale.getDefault(), "%.2f °C", t)
                     }
                     // Determinar condición del cielo con sensores (si hay radiación/humedad)
                     val condition = determineSkyConditionFromSensors(wd.sensors, isDaytime = true)

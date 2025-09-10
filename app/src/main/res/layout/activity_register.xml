@@ -11,7 +11,7 @@
         android:id="@+id/lyTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,7 +27,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="50dp"
             android:text="Crear Cuenta"
             android:textColor="@color/white"
             android:textSize="24sp"
@@ -44,6 +44,7 @@
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@+id/lyTitle"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="49dp">
 
         <EditText
@@ -81,10 +82,20 @@
             android:id="@+id/etPassword"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="15dp"
             android:background="@drawable/circular_background"
             android:gravity="center"
             android:hint="Contraseña"
+            android:inputType="textPassword" />
+
+        <EditText
+            android:id="@+id/etPasswordConfirm"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/circular_background"
+            android:gravity="center"
+            android:hint="Confirmar Contraseña"
             android:inputType="textPassword" />
 
         <Button

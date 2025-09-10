@@ -66,11 +66,15 @@ class WeatherStationViewModel : ViewModel() {
                     response.body()?.let { tempMaxMin ->
                         _temperatureMaxMin.postValue(tempMaxMin)
                     }
-                } else {
+                } else if (response.code() != 404) {
+                    // Solo mostrar error si no es 404 (estación no encontrada es común)
                     _error.postValue("Error al obtener temperatura máx/mín: ${response.code()}")
                 }
             } catch (e: Exception) {
-                _error.postValue("Error al obtener temperatura máx/mín: ${e.message}")
+                // Solo mostrar errores de conexión, no de estaciones no encontradas
+                if (e.message?.contains("404", ignoreCase = true) != true) {
+                    _error.postValue("Error al obtener temperatura máx/mín: ${e.message}")
+                }
             }
         }
     }
@@ -113,11 +117,15 @@ class WeatherStationViewModel : ViewModel() {
                     response.body()?.let { widgetData ->
                         _widgetData.postValue(widgetData)
                     }
-                } else {
+                } else if (response.code() != 404) {
+                    // Solo mostrar error si no es 404 (estación no encontrada es común)
                     _error.postValue("Error al obtener datos del widget: ${response.code()}")
                 }
             } catch (e: Exception) {
-                _error.postValue("Error al obtener datos del widget: ${e.message}")
+                // Solo mostrar errores de conexión, no de estaciones no encontradas
+                if (e.message?.contains("404", ignoreCase = true) != true) {
+                    _error.postValue("Error al obtener datos del widget: ${e.message}")
+                }
             }
         }
     }

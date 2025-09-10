@@ -16,7 +16,7 @@
         android:configChanges="uiMode|screenSize|smallestScreenSize|orientation|screenLayout"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@drawable/ic_logoraf"
+        android:icon="@drawable/lg_ramf"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@drawable/ic_logoraf"

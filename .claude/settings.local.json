@@ -15,7 +15,11 @@
       "Read(C:\\Users\\Matias\\Downloads/**)",
       "Read(C:\\Users\\Matias\\Downloads/**)",
       "Read(C:\\Users\\Matias\\Downloads/**)",
-      "Read(C:\\Users\\Matias\\Downloads/**)"
+      "Read(C:\\Users\\Matias\\Downloads/**)",
+      "Read(C:\\Users\\Matias\\Desktop/**)",
+      "Read(//c/Users/Matias/Desktop/**)",
+      "Bash(.gradlew.bat assembleDebug)",
+      "Bash(gradlew.bat assembleDebug:*)"
     ],
     "deny": [],
     "ask": []

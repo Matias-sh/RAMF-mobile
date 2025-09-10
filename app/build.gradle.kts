@@ -29,8 +29,8 @@ android {
         
         // Configuraciones para producción
         buildConfigField("String", "BASE_URL_DEV", "\"http://192.168.0.2:3100/api/\"")
-        buildConfigField("String", "BASE_URL_PROD", "\"https://api.ramf.com.ar/api/\"")
-        buildConfigField("boolean", "DEBUG_MODE", "true")
+        buildConfigField("String", "BASE_URL_PROD", "\"https://secytdi.formosa.gob.ar/api/http/\"")
+        buildConfigField("boolean", "DEBUG_MODE", "false")
     }
 
     buildTypes {
@@ -48,7 +48,7 @@ android {
             isDebuggable = false
             isShrinkResources = true
             buildConfigField("boolean", "DEBUG_MODE", "false")
-            buildConfigField("String", "API_BASE_URL", "\"https://api.ramf.com.ar/api/\"")
+            buildConfigField("String", "API_BASE_URL", "\"https://secytdi.formosa.gob.ar/api/http/\"")
             
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),

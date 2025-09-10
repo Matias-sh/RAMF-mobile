@@ -176,12 +176,24 @@ class SingleChartFragment : Fragment() {
     }
     
     private fun updateChart(data: WrapperResponse) {
-        val entries = mapDataToEntries(data, parameter)
+        android.util.Log.d("SingleChartFragment", "updateChart called - Parameter: $parameter")
+        android.util.Log.d("SingleChartFragment", "Data received - Size: ${data.data.size}")
         
-        if (entries.isNotEmpty()) {
+        val entries = mapDataToEntries(data, parameter)
+        android.util.Log.d("SingleChartFragment", "Entries mapped - Count: ${entries.size}")
+        
+        // Si no hay entries de la API, crear algunos de prueba para diagnóstico
+        val finalEntries = if (entries.isEmpty()) {
+            android.util.Log.w("SingleChartFragment", "No entries from API data, creating test entries for debugging")
+            createTestEntries(parameter)
+        } else {
+            entries
+        }
+        
+        if (finalEntries.isNotEmpty()) {
             // Calcular rango de tiempo real de los datos recibidos
-            val timeRange = if (entries.size > 1) {
-                (entries.last().x - entries.first().x).toLong()
+            val timeRange = if (finalEntries.size > 1) {
+                (finalEntries.last().x - finalEntries.first().x).toLong()
             } else {
                 3600000L // 1 hora por defecto
             }
@@ -201,7 +213,7 @@ class SingleChartFragment : Fragment() {
                 android.util.Log.d("SingleChartFragment", "Configurando eje X - Rango: ${timeRange}ms, Granularidad: ${granularity}ms, LabelCount: $labelCount")
             }
             
-            val dataSet = ChartUtils.createLineDataSet(entries, parameter, false)
+            val dataSet = ChartUtils.createLineDataSet(finalEntries, parameter, false)
             val lineData = LineData(dataSet)
             
             binding.lineChart.data = lineData
@@ -209,7 +221,7 @@ class SingleChartFragment : Fragment() {
             binding.lineChart.invalidate()
             
             // Actualizar estadísticas
-            updateStats(entries)
+            updateStats(finalEntries)
             
             binding.errorMessage.visibility = View.GONE
         } else {
@@ -236,8 +248,30 @@ class SingleChartFragment : Fragment() {
     }
     
     private fun mapDataToEntries(data: WrapperResponse, parameter: String): List<Entry> {
-        return data.data.mapNotNull { weatherData ->
+        android.util.Log.d("SingleChartFragment", "mapDataToEntries - Parameter: '$parameter', Data count: ${data.data.size}")
+        
+        val entries = data.data.mapIndexedNotNull { index, weatherData ->
             val timestamp = parseTimestamp(weatherData.date)
+            
+            // Log detallado para primera entrada
+            if (index == 0) {
+                android.util.Log.d("SingleChartFragment", "First entry analysis:")
+                android.util.Log.d("SingleChartFragment", "  Date: ${weatherData.date}")
+                android.util.Log.d("SingleChartFragment", "  Parsed timestamp: $timestamp")
+                android.util.Log.d("SingleChartFragment", "  Target parameter: '$parameter'")
+                
+                // Log todos los sensores disponibles
+                android.util.Log.d("SingleChartFragment", "Available sensors:")
+                android.util.Log.d("SingleChartFragment", "  hcAirTemperature: ${weatherData.sensors.hcAirTemperature?.avg}")
+                android.util.Log.d("SingleChartFragment", "  hcRelativeHumidity: ${weatherData.sensors.hcRelativeHumidity?.avg}")
+                android.util.Log.d("SingleChartFragment", "  solarRadiation: ${weatherData.sensors.solarRadiation?.avg}")
+                android.util.Log.d("SingleChartFragment", "  precipitation: ${weatherData.sensors.precipitation?.sum}")
+                android.util.Log.d("SingleChartFragment", "  usonicWindSpeed: ${weatherData.sensors.usonicWindSpeed?.avg}")
+                android.util.Log.d("SingleChartFragment", "  airPressure: ${weatherData.sensors.airPressure?.avg}")
+                android.util.Log.d("SingleChartFragment", "  dewPoint: ${weatherData.sensors.dewPoint?.avg}")
+                android.util.Log.d("SingleChartFragment", "  windGust: ${weatherData.sensors.windGust?.max}")
+            }
+            
             val value = when (parameter) {
                 "temperatura" -> weatherData.sensors.hcAirTemperature?.avg
                 "humedad" -> weatherData.sensors.hcRelativeHumidity?.avg
@@ -248,13 +282,28 @@ class SingleChartFragment : Fragment() {
                 "dewPoint" -> weatherData.sensors.dewPoint?.avg
                 "airPressure" -> weatherData.sensors.airPressure?.avg
                 "windGust" -> weatherData.sensors.windGust?.max
-                else -> null
+                else -> {
+                    android.util.Log.w("SingleChartFragment", "Unknown parameter: '$parameter'")
+                    null
+                }
+            }
+            
+            // Log razón de exclusión
+            if (timestamp == null) {
+                android.util.Log.w("SingleChartFragment", "Skipping entry - null timestamp for date: ${weatherData.date}")
+            } else if (value == null) {
+                android.util.Log.w("SingleChartFragment", "Skipping entry - null value for parameter '$parameter' at ${weatherData.date}")
+            } else {
+                android.util.Log.d("SingleChartFragment", "Valid entry - '$parameter': $value at ${weatherData.date}")
             }
             
             if (timestamp != null && value != null) {
                 Entry(timestamp.toFloat(), value.toFloat())
             } else null
         }.sortedBy { it.x }
+        
+        android.util.Log.d("SingleChartFragment", "Final entries count: ${entries.size}")
+        return entries
     }
     
     private fun parseTimestamp(dateString: String): Long? {
@@ -265,6 +314,31 @@ class SingleChartFragment : Fragment() {
         } catch (e: Exception) {
             null
         }
+    }
+    
+    private fun createTestEntries(parameter: String): List<Entry> {
+        android.util.Log.d("SingleChartFragment", "Creating test entries for parameter: $parameter")
+        val baseTime = System.currentTimeMillis()
+        val entries = mutableListOf<Entry>()
+        
+        // Crear 5 puntos de prueba
+        for (i in 0..4) {
+            val timestamp = baseTime - (4 - i) * 600000L // Cada 10 minutos hacia atrás
+            val value = when (parameter) {
+                "temperatura" -> 20.0f + i * 2.5f // 20-30°C
+                "humedad" -> 40.0f + i * 10f // 40-80%
+                "precipitacion" -> i * 2.5f // 0-10mm
+                "vientoVel" -> 5.0f + i * 3f // 5-20 km/h
+                "airPressure" -> 1010.0f + i * 2f // 1010-1018 hPa
+                "radiacion" -> 100.0f + i * 150f // 100-700 W/m²
+                else -> 10.0f + i * 5f // Valor genérico
+            }
+            
+            entries.add(Entry(timestamp.toFloat(), value))
+            android.util.Log.d("SingleChartFragment", "Test entry $i: time=$timestamp, value=$value")
+        }
+        
+        return entries
     }
     
     private fun showError(message: String) {
